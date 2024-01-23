@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function($table) {
             $table->string('dni')->unique();
-            $table->string('last_name');
+            $table->string('last_name')->nullable();
             $table->string('phone')->nullable();
             $table->string('avatar')->nullable();
         });
