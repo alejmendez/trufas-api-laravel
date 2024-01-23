@@ -15,7 +15,25 @@ class UserController extends Controller
      */
     public function index()
     {
-        return new UserCollection(User::paginate());
+        $users = User::with('roles');
+
+        $order = request('order');
+        if ($order) {
+            $order = explode(',', $order);
+            foreach ($order as $col) {
+                $firstChar = substr($col, 0, 1);
+                $direction = 'asc';
+                if ($firstChar === '-') {
+                    $col = substr($col, 1);
+                    $direction = 'desc';
+                }
+                $users->orderBy($col, $direction);
+            }
+        }
+
+        \Log::debug($users->toSql());
+
+        return new UserCollection($users->paginate());
     }
 
     /**
@@ -23,7 +41,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::create($request->all());
+        return response()->json($user, 201);
     }
 
     /**
@@ -31,7 +50,7 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        return new UserResource(User::findOrFail($id));
+        return new UserResource(User::with('roles')->findOrFail($id));
     }
 
     /**
@@ -39,7 +58,9 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::find($id);
+        $user->update($request->all());
+        return response()->json($user, 200);
     }
 
     /**
@@ -47,6 +68,7 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        User::destroy($id);
+        return response()->json(null, 204);
     }
 }
