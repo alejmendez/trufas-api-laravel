@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Resources\UserCollection;
-use App\Http\Resources\UserResource;
 use App\Models\User;
+
+use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\UserCollection;
 
 class UserController extends Controller
 {
@@ -17,23 +17,10 @@ class UserController extends Controller
     {
         $users = User::with('roles');
 
-        $order = request('order');
-        if ($order) {
-            $order = explode(',', $order);
-            foreach ($order as $col) {
-                $firstChar = substr($col, 0, 1);
-                $direction = 'asc';
-                if ($firstChar === '-') {
-                    $col = substr($col, 1);
-                    $direction = 'desc';
-                }
-                $users->orderBy($col, $direction);
-            }
-        }
+        $users->order(request('order', ''));
+        $users->search(request('search', ''));
 
-        \Log::debug($users->toSql());
-
-        return new UserCollection($users->paginate());
+        return new UserCollection($users->simplePaginate());
     }
 
     /**
