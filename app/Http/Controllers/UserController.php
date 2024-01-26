@@ -20,7 +20,7 @@ class UserController extends Controller
         $users->order(request('order', ''));
         $users->search(request('search', ''));
 
-        return new UserCollection($users->simplePaginate());
+        return new UserCollection($users->paginate());
     }
 
     /**
