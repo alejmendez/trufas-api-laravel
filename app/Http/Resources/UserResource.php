@@ -12,7 +12,7 @@ class UserResource extends JsonResource
         $role = $this->roles[0];
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'name' => $this->full_name,
             'email' => $this->email,
             'dni' => $this->dni,
             'last_name' => $this->last_name,

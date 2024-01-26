@@ -22,7 +22,8 @@ class UserSeeder extends Seeder
                 'Méndez',
                 'alejmendez.87@gmail.com',
                 '26.604.667-7',
-                'Super Admin'
+                'Super Admin',
+                '+(56) 9 1234 5678',
             ],
             [
                 'Fernando',
@@ -30,6 +31,7 @@ class UserSeeder extends Seeder
                 'fud@undo.cl',
                 '30.052.194-0',
                 'Administrador',
+                '+(56) 9 1234 5678',
             ],
             [
                 'Cristian',
@@ -37,6 +39,7 @@ class UserSeeder extends Seeder
                 'cristiancorreac@gmail.com',
                 '30.335.289-9',
                 'Administrador',
+                '+(56) 9 1234 5678',
             ],
             [
                 'Maria',
@@ -44,6 +47,7 @@ class UserSeeder extends Seeder
                 'camporamaria@gmail.com',
                 '36.399.118-1',
                 'Administrador',
+                '+(56) 9 1234 5678',
             ],
         ];
 
@@ -55,7 +59,7 @@ class UserSeeder extends Seeder
                 'dni' => $user[3],
                 'password' => Hash::make('12345678'),
                 'avatar' => null,
-                'phone' => null,
+                'phone' => $user[5],
                 'email_verified_at' => now(),
                 'remember_token' => Str::random(10),
             ])->assignRole($user[4]);
