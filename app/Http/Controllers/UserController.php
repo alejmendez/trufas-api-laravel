@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserCollection;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
@@ -26,9 +28,14 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $user = User::create($request->all());
+        $avatar = $request->file('avatar');
+        $data = $request->all();
+        if ($avatar) {
+            $data['avatar'] = $request->file('avatar')->store('avatars');
+        }
+        $user = User::create($data)->assignRole($data['role']);
         return response()->json($user, 201);
     }
 
@@ -43,7 +50,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
         $user = User::find($id);
         $user->update($request->all());
