@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserCollection;
 use App\Http\Requests\StoreUserRequest;
@@ -52,8 +51,15 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, string $id)
     {
-        $user = User::find($id);
-        $user->update($request->all());
+        $user = User::findOrFail($id);
+
+        $avatar = $request->file('avatar');
+        $data = $request->all();
+        if ($avatar) {
+            $data['avatar'] = $request->file('avatar')->store('avatars');
+        }
+
+        $user->update($data)->assignRole($data['role']);
         return response()->json($user, 200);
     }
 
