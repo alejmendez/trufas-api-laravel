@@ -17,7 +17,6 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('roles');
-
         $users->order(request('order', ''));
         $users->search(request('search', ''));
 
@@ -58,8 +57,11 @@ class UserController extends Controller
         if ($avatar) {
             $data['avatar'] = $request->file('avatar')->store('avatars');
         }
-
-        $user->update($data)->assignRole($data['role']);
+        logger()->error(request());
+        $user->update($data);
+        if (isset($data['role'])) {
+            $user->assignRole($data['role']);
+        }
         return response()->json($user, 200);
     }
 
