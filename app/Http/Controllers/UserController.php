@@ -34,7 +34,7 @@ class UserController extends Controller
             $data['avatar'] = $request->file('avatar')->store('avatars');
         }
         $user = User::create($data)->assignRole($data['role']);
-        return response()->json($user, 201);
+        return response()->json(new UserResource($user), 201);
     }
 
     /**
@@ -57,12 +57,12 @@ class UserController extends Controller
         if ($avatar) {
             $data['avatar'] = $request->file('avatar')->store('avatars');
         }
-        logger()->error(request());
+
         $user->update($data);
         if (isset($data['role'])) {
             $user->assignRole($data['role']);
         }
-        return response()->json($user, 200);
+        return response()->json(new UserResource($user), 200);
     }
 
     /**
