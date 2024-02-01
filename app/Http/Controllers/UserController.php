@@ -16,9 +16,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles');
-        $users->order(request('order', ''));
-        $users->search(request('search', ''));
+        $users = User::with('roles')
+            ->order(request('order', ''))
+            ->search(request('search', ''));
 
         return new UserCollection($users->paginate());
     }
