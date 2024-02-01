@@ -28,12 +28,14 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $avatar = $request->file('avatar');
         $data = $request->all();
-        if ($avatar) {
-            $data['avatar'] = $request->file('avatar')->store('avatars');
+        $data['avatar'] = $request->file('avatar') ? $request->file('avatar')->store('avatars') : null;
+
+        $user = User::create($data);
+
+        if ($data['role']) {
+            $user->assignRole($data['role']);
         }
-        $user = User::create($data)->assignRole($data['role']);
         return response()->json(new UserResource($user), 201);
     }
 
@@ -52,15 +54,23 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $avatar = $request->file('avatar');
         $data = $request->all();
-        if ($avatar) {
-            $data['avatar'] = $request->file('avatar')->store('avatars');
-        }
+        $data['avatar'] = $request->file('avatar') ? $request->file('avatar')->store('avatars') : null;
 
         $user->update($data);
+
         if (isset($data['role'])) {
-            $user->assignRole($data['role']);
+            $user->getRoleNames()
+                ->filter(function ($name) use ($data) {
+                    return $data['role'] !== $name;
+                })
+                ->map(function ($name) use ($user) {
+                    $user->removeRole($name);
+                });
+
+            if (!$user->hasExactRoles($data['role'])) {
+                $user->assignRole($data['role']);
+            }
         }
         return response()->json(new UserResource($user), 200);
     }
