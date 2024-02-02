@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 
-use Illuminate\Support\Facades\Hash;
+use App\Services\Users\FindUser;
+use App\Services\Users\ListUser;
+use App\Services\Users\CreateUser;
+use App\Services\Users\UpdateUser;
+use App\Services\Users\DeleteUser;
+
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserCollection;
 use App\Http\Requests\StoreUserRequest;
@@ -17,9 +22,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles')
-            ->order(request('order', ''))
-            ->search(request('search', ''));
+        $order = request('order', '');
+        $search = request('search', '');
+        $users = ListUser::call($order, $search);
 
         return new UserCollection($users->paginate());
     }
@@ -29,18 +34,9 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $data = $request->all();
-        if ($request->hasFile('avatar')) {
-            $avatar = $request->file('avatar')->store(options: 'avatars');
-        }
-        $data['avatar'] = $avatar ?? null;
-        $data['password'] = Hash::make($request->password);
+        $avatar = $this->storeAvatar($request);
+        $user = CreateUser::call($request->all(), $avatar);
 
-        $user = User::create($data);
-
-        if ($data['role']) {
-            $user->assignRole($data['role']);
-        }
         return response()->json(new UserResource($user), 201);
     }
 
@@ -49,7 +45,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        return new UserResource(User::with('roles')->findOrFail($id));
+        $user = FindUser::call($id);
+        return new UserResource($user);
     }
 
     /**
@@ -57,32 +54,10 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, string $id)
     {
-        $user = User::findOrFail($id);
+        $avatar = $this->storeAvatar($request);
 
-        if ($request->hasFile('avatar')) {
-            $avatar = $request->file('avatar')->store(options: 'avatars');
-        }
-        $data['avatar'] = $avatar ?? null;
+        $user = UpdateUser::call($id, $request->all(), $avatar);
 
-        if ($request->avatarRemove) {
-            $data['avatar'] = null;
-        }
-
-        $user->update($data);
-
-        if (isset($data['role'])) {
-            $user->getRoleNames()
-                ->filter(function ($name) use ($data) {
-                    return $data['role'] !== $name;
-                })
-                ->map(function ($name) use ($user) {
-                    $user->removeRole($name);
-                });
-
-            if (!$user->hasExactRoles($data['role'])) {
-                $user->assignRole($data['role']);
-            }
-        }
         return response()->json(new UserResource($user), 200);
     }
 
@@ -91,7 +66,16 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        User::destroy($id);
+        DeleteUser::call($id);
         return response()->json(null, 204);
+    }
+
+    protected function storeAvatar(UpdateUserRequest | StoreUserRequest $request)
+    {
+        if (!$request->hasFile('avatar')) {
+            return null;
+        }
+
+        return $request->file('avatar')->store(options: 'avatars');
     }
 }
