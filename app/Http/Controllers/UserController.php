@@ -29,7 +29,11 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $data = $request->all();
-        $data['avatar'] = $request->file('avatar') ? $request->file('avatar')->store('avatars') : null;
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar')->store(options: 'avatars');
+        }
+        $data['avatar'] = $avatar ?? null;
+        $data['password'] = Hash::make($request->password);
 
         $user = User::create($data);
 
@@ -54,8 +58,10 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $data = $request->all();
-        $data['avatar'] = $request->file('avatar') ? $request->file('avatar')->store('avatars') : null;
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar')->store(options: 'avatars');
+        }
+        $data['avatar'] = $avatar ?? null;
 
         $user->update($data);
 
