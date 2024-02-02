@@ -63,6 +63,10 @@ class UserController extends Controller
         }
         $data['avatar'] = $avatar ?? null;
 
+        if ($request->avatarRemove) {
+            $data['avatar'] = null;
+        }
+
         $user->update($data);
 
         if (isset($data['role'])) {
