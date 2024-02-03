@@ -7,9 +7,8 @@ use App\Models\User;
 
 class CreateUser
 {
-    public static function call($data, $avatar): User
+    public static function call($data): User
     {
-        $data['avatar'] = $avatar ?? null;
         $data['password'] = Hash::make($data['password']);
 
         $user = User::create($data);

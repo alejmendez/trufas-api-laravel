@@ -32,8 +32,9 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $avatar = $this->storeAvatar($request);
-        $user = CreateUser::call($request->all(), $avatar);
+        $data = $request->all();
+        $data['avatar'] = $this->storeAvatar($request);
+        $user = CreateUser::call($data);
 
         return response()->json(new UserResource($user), 201);
     }
@@ -53,8 +54,9 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, string $id)
     {
         $avatar = $this->storeAvatar($request);
-
-        $user = UpdateUser::call($id, $request->all(), $avatar);
+        $data = $request->all();
+        $data['avatar'] = $avatar;
+        $user = UpdateUser::call($id, $data);
 
         return response()->json(new UserResource($user), 200);
     }

@@ -10,6 +10,12 @@ class UpdateField
     {
         $field = Field::findOrFail($id);
 
+        $blueprintRemove = $data['blueprintRemove'] ?? false;
+
+        if ($blueprintRemove === true) {
+            $data['blueprint'] = null;
+        }
+
         $field->update($data);
 
         return $field;

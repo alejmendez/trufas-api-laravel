@@ -6,11 +6,10 @@ use App\Models\User;
 
 class UpdateUser
 {
-    public static function call($id, $data, $avatar): User
+    public static function call($id, $data): User
     {
         $user = User::findOrFail($id);
 
-        $data['avatar'] = $avatar ?? null;
         $avatarRemove = $data['avatarRemove'] ?? false;
 
         if ($avatarRemove === true) {
