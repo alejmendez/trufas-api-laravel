@@ -11,7 +11,7 @@ class StorePlantRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,14 @@ class StorePlantRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|max:250',
+            'type' => 'required|max:250',
+            'age' => 'required|max:250',
+            'location' => 'required|max:250',
+            'location_xy' => 'required|max:250',
+            'planned_at' => 'required|max:250',
+            'manager' => 'required|max:250',
+            'code' => 'required|max:250',
         ];
     }
 }

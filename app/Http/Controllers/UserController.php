@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-
 use App\Services\Users\FindUser;
 use App\Services\Users\ListUser;
 use App\Services\Users\CreateUser;

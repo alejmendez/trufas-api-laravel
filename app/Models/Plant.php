@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+
+use App\Traits\Orderable;
+use App\Traits\Searchable;
 
 class Plant extends Model
 {
-    use HasFactory;
+    use HasFactory, Orderable, Searchable;
 
     protected $fillable = [
         'name',

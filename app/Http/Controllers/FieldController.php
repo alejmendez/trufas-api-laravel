@@ -2,7 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Services\Fields\FindField;
+use App\Services\Fields\ListField;
+use App\Services\Fields\CreateField;
+use App\Services\Fields\UpdateField;
+use App\Services\Fields\DeleteField;
+
+use App\Http\Resources\FieldResource;
+use App\Http\Resources\FieldCollection;
+use App\Http\Requests\StoreFieldRequest;
+use App\Http\Requests\UpdateFieldRequest;
 
 class FieldController extends Controller
 {
@@ -11,15 +20,24 @@ class FieldController extends Controller
      */
     public function index()
     {
-        //
+        $order = request('order', '');
+        $search = request('search', '');
+        $fields = ListField::call($order, $search);
+
+        return new FieldCollection($fields->paginate());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreFieldRequest $request)
     {
-        //
+        $blueprint = $this->storeBlueprint($request);
+        $data = $request->all();
+        $data['blueprint'] = $blueprint;
+        $field = CreateField::call($data);
+
+        return response()->json(new FieldResource($field), 201);
     }
 
     /**
@@ -27,15 +45,22 @@ class FieldController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $field = FindField::call($id);
+        return new FieldResource($field);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateFieldRequest $request, string $id)
     {
-        //
+        $blueprint = $this->storeBlueprint($request);
+        $data = $request->all();
+        $data['blueprint'] = $blueprint;
+
+        $field = UpdateField::call($id, $data);
+
+        return response()->json(new FieldResource($field), 200);
     }
 
     /**
@@ -43,6 +68,16 @@ class FieldController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        DeleteField::call($id);
+        return response()->json(null, 204);
+    }
+
+    protected function storeBlueprint(UpdateFieldRequest | StoreFieldRequest $request)
+    {
+        if (!$request->hasFile('blueprint')) {
+            return null;
+        }
+
+        return $request->file('blueprint')->store(options: 'blueprints');
     }
 }

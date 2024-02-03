@@ -63,6 +63,14 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+
+        'blueprints' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/blueprints'),
+            'url' => env('APP_URL').'/storage/blueprints',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
     ],
 
     /*

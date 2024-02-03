@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
+use App\Traits\Orderable;
+use App\Traits\Searchable;
+
 
 class Field extends Model
 {
-    use HasFactory;
+    use HasFactory, Orderable, Searchable;
 
     protected $fillable = [
         'name',

@@ -11,7 +11,7 @@ class UpdateFieldRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdateFieldRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|max:250',
+            'location' => 'required|max:250',
+            'size' => 'required|max:250',
         ];
     }
 }

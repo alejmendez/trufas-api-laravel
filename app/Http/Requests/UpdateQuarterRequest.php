@@ -11,7 +11,7 @@ class UpdateQuarterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class UpdateQuarterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|max:250',
+            'area' => 'required|max:250',
+            'planned_at' => 'required|max:250',
+            'field_id' => 'required|max:250',
         ];
     }
 }
