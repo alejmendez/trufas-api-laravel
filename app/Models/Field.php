@@ -22,10 +22,6 @@ class Field extends Model
         'blueprint',
     ];
 
-    protected $casts = [
-        'blueprint' => 'array',
-    ];
-
     public function quarters(): HasMany
     {
         return $this->hasMany(Quarter::class);

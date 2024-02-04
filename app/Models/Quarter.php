@@ -22,10 +22,6 @@ class Quarter extends Model
         'field_id',
     ];
 
-    protected $casts = [
-        'blueprint' => 'array',
-    ];
-
     public function plants(): HasMany
     {
         return $this->hasMany(Plant::class);

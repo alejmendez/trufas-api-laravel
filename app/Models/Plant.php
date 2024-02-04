@@ -25,10 +25,6 @@ class Plant extends Model
         'quarter_id',
     ];
 
-    protected $casts = [
-        'blueprint' => 'array',
-    ];
-
     public function field()
     {
         return $this->quarter->field();

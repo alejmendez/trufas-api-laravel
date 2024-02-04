@@ -12,6 +12,10 @@ class UpdateField
 
         $blueprintRemove = $data['blueprintRemove'] ?? false;
 
+        if (!$data['blueprint']) {
+            unset($data['blueprint']);
+        }
+
         if ($blueprintRemove === true) {
             $data['blueprint'] = null;
         }
