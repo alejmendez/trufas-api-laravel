@@ -8,8 +8,8 @@ class ListPlant
 {
     public static function call($order, $search)
     {
-        $plant = Plant::order($order)->search($search);
+        $plants = Plant::order($order)->search($search);
 
-        return $plant;
+        return $plants;
     }
 }
