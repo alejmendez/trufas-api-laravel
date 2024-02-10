@@ -21,7 +21,12 @@ class QuarterResource extends JsonResource
             'area' => $this->area,
             'planned_at' => $this->planned_at,
             'field_id' => $this->field_id,
+            'number_of_trees' => $this->plants->count(),
             'blueprint' => $this->blueprint ? Storage::disk('blueprints')->url($this->blueprint) : '',
+            'field' => [
+                'id' => $this->field->id,
+                'name' => $this->field->name,
+            ],
         ];
     }
 }

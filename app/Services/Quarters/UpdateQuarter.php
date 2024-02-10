@@ -6,7 +6,7 @@ use App\Models\Quarter;
 
 class UpdateQuarter
 {
-    public static function call($id, $data, $avatar): Quarter
+    public static function call($id, $data): Quarter
     {
         $quarter = Quarter::findOrFail($id);
 

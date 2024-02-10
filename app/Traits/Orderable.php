@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 trait Orderable
 {
 
-    public function scopeOrder(Builder $query, String $order): void
+    public function scopeOrder(Builder $query, String $order = ''): void
     {
         if ($order === '') {
             return;

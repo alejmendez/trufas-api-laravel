@@ -22,7 +22,14 @@ class QuarterController extends Controller
     {
         $order = request('order', '');
         $search = request('search', '');
+
+        $typeResult = request('type_result', 'pagination');
+
         $quarter = ListQuarter::call($order, $search);
+
+        if ($typeResult === 'select') {
+            return $quarter->pluck('name', 'id');
+        }
 
         return new QuarterCollection($quarter->paginate());
     }

@@ -22,7 +22,13 @@ class FieldController extends Controller
     {
         $order = request('order', '');
         $search = request('search', '');
+        $typeResult = request('type_result', 'pagination');
+
         $fields = ListField::call($order, $search);
+
+        if ($typeResult === 'select') {
+            return $fields->pluck('name', 'id');
+        }
 
         return new FieldCollection($fields->paginate());
     }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait Searchable
 {
-    public function scopeSearch(Builder $query, String $search): void
+    public function scopeSearch(Builder $query, String $search = ''): void
     {
         if ($search === '') {
             return;
