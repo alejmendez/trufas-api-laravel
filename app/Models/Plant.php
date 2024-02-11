@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use App\Traits\Orderable;
@@ -22,14 +23,10 @@ class Plant extends Model
         'location_xy',
         'planned_at',
         'manager',
+        'code',
         'blueprint',
         'quarter_id',
     ];
-
-    public function field()
-    {
-        return $this->quarter->field();
-    }
 
     public function quarter(): BelongsTo
     {

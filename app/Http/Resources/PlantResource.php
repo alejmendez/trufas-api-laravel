@@ -27,8 +27,8 @@ class PlantResource extends JsonResource
             'code' => $this->code,
             'blueprint' => $this->blueprint ? Storage::disk('blueprints')->url($this->blueprint) : '',
             'field' => [
-                'id' => $this->field->id,
-                'name' => $this->field->name,
+                'id' => $this->quarter->field->id,
+                'name' => $this->quarter->field->name,
             ],
             'quarter' => [
                 'id' => $this->quarter->id,
