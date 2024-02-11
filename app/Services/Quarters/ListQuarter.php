@@ -6,9 +6,9 @@ use App\Models\Quarter;
 
 class ListQuarter
 {
-    public static function call($order, $search)
+    public static function call($filters, $order, $search)
     {
-        $quarter = Quarter::with('field')->order($order)->search($search);
+        $quarter = Quarter::with('field')->filter($filters)->order($order)->search($search);
 
         return $quarter;
     }

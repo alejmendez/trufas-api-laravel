@@ -20,12 +20,13 @@ class QuarterController extends Controller
      */
     public function index()
     {
+        $filters = request('filter', []);
         $order = request('order', '');
         $search = request('search', '');
 
         $typeResult = request('type_result', 'pagination');
 
-        $quarter = ListQuarter::call($order, $search);
+        $quarter = ListQuarter::call($filters, $order, $search);
 
         if ($typeResult === 'select') {
             return $quarter->pluck('name', 'id');

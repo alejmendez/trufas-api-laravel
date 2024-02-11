@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 use App\Traits\Orderable;
 use App\Traits\Searchable;
-
+use App\Traits\Filterable;
 
 class Field extends Model
 {
-    use HasFactory, Orderable, Searchable;
+    use HasFactory, Orderable, Searchable, Filterable;
 
     protected $fillable = [
         'name',

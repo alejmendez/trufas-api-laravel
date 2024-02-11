@@ -20,11 +20,12 @@ class FieldController extends Controller
      */
     public function index()
     {
+        $filters = request('filter', []);
         $order = request('order', '');
         $search = request('search', '');
         $typeResult = request('type_result', 'pagination');
 
-        $fields = ListField::call($order, $search);
+        $fields = ListField::call($filters, $order, $search);
 
         if ($typeResult === 'select') {
             return $fields->pluck('name', 'id');

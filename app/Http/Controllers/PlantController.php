@@ -20,9 +20,10 @@ class PlantController extends Controller
      */
     public function index()
     {
+        $filters = request('filter', []);
         $order = request('order', '');
         $search = request('search', '');
-        $plant = ListPlant::call($order, $search);
+        $plant = ListPlant::call($filters, $order, $search);
 
         return new PlantCollection($plant->paginate());
     }
